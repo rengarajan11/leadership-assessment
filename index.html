@@ -573,11 +573,13 @@
 
   /* Hidden on-screen capture target — html2canvas fails when off-screen */
   #emailCapture {
-    position: fixed;
-    left: 0;
+    position: absolute;
+    left: -9999px;
     top: 0;
-    z-index: -1;
-    opacity: 0;
+    opacity: 1;
+    visibility: visible;
+    width: 1080px;
+    background: #f7f6f2;
     pointer-events: none;
     width: 720px;
     background: #f7f6f2;
@@ -1174,10 +1176,28 @@ function buildCaptureElement({ scores, maxPossible, sd }) {
         </div>
       `).join('')}
     </div>
-    ${buildAnswersCaptureHtml()}
-  `;
-  return el;
-}
+    #emailCapture {
+    width: 1080px;
+	}
+
+    .cap-title {
+    font-size: 52px;
+        }
+
+    .cap-primary {
+     padding: 40px;
+        }
+
+    .cap-primary h3 {
+     font-size: 48px;
+     }
+
+    .cap-card .score {
+     font-size: 72px;
+       }
+   `;
+     return el;
+    }
 
 async function captureReportBlob(reportData) {
   if (typeof html2canvas !== 'function') {
@@ -1243,7 +1263,8 @@ async function submitAssessment() {
     formData.append('Analyst Score', String(reportData.scores.analyst));
     formData.append('Submitted At', new Date().toLocaleString());
     formData.append('Report', 'Full visual report is attached as a PNG image. Open the attachment to view scores and detailed answers.');
-    formData.append('attachment', imageBlob, fileName);
+    const file = new File([imageBlob], fileName, { type: 'image/png' });
+    formData.append('attachment', file);
 
     hint.textContent = 'Sending your responses…';
     const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ADMIN_EMAIL)}`, {
