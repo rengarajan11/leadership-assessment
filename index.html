@@ -458,6 +458,118 @@
     margin-top: 20px;
   }
   .retake-btn:hover { background: var(--ink); color: #fff; }
+
+  /* ── REGISTRATION ── */
+  .registration-card {
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--rule);
+    padding: 36px 32px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .registration-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .registration-card .sub {
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-mid);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-bottom: 8px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    background: #fafafa;
+    color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .form-group input.invalid { border-color: #ef4444; }
+  .field-error {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 6px;
+    display: none;
+  }
+  .field-error.show { display: block; }
+  .start-btn {
+    width: 100%;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .start-btn:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(44,62,122,0.25); }
+
+  /* ── THANK YOU ── */
+  .thankyou-card {
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--rule);
+    padding: 48px 36px;
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .thankyou-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--stabiliser-soft);
+    border: 2px solid #82e0aa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 28px;
+  }
+  .thankyou-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .thankyou-card p {
+    font-size: 14px;
+    color: var(--ink-mid);
+    line-height: 1.7;
+  }
+  .submit-btn.loading { opacity: 0.7; cursor: wait; }
+
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -468,14 +580,32 @@
   <p>Rank each option from 4 (most like you) to 1 (least like you). Every scenario must have a unique rank for each choice.</p>
 </header>
 
-<div class="progress-bar-wrap">
+<div class="progress-bar-wrap hidden" id="progressBar">
   <span class="label" id="progressLabel">0 of 10 done</span>
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
   <span class="progress-pct" id="progressPct">0%</span>
 </div>
 
 <main>
-  <div id="quiz">
+  <div id="registration">
+    <div class="registration-card">
+      <h2>Before We Begin</h2>
+      <p class="sub">Please enter your details to start the leadership style assessment. Your results will be reviewed by the administrator.</p>
+      <div class="form-group">
+        <label for="participantName">Full Name *</label>
+        <input type="text" id="participantName" placeholder="Enter your full name" autocomplete="name">
+        <div class="field-error" id="nameError">Please enter your name.</div>
+      </div>
+      <div class="form-group">
+        <label for="participantEmail">Email Address *</label>
+        <input type="email" id="participantEmail" placeholder="Enter your email address" autocomplete="email">
+        <div class="field-error" id="emailError">Please enter a valid email address.</div>
+      </div>
+      <button class="start-btn" onclick="startAssessment()">Start Assessment</button>
+    </div>
+  </div>
+
+  <div id="quiz" class="hidden">
     <div class="instruction-card">
       <strong>How to rank:</strong> For each situation, assign <strong>4</strong> to the choice most like you, <strong>3</strong> to the next, <strong>2</strong>, then <strong>1</strong> (least like you). Each number can only be used once per scenario.
     </div>
@@ -483,25 +613,27 @@
     <div id="scenarios"></div>
 
     <div class="submit-area">
-      <button class="submit-btn" id="submitBtn" disabled onclick="showResults()">View My Results</button>
-      <div class="submit-hint" id="submitHint">Complete all 10 scenarios to see your results</div>
+      <button class="submit-btn" id="submitBtn" disabled onclick="submitAssessment()">Submit Assessment</button>
+      <div class="submit-hint" id="submitHint">Complete all 10 scenarios to submit</div>
     </div>
   </div>
 
-  <div id="results">
-    <div class="results-header">
-      <h2>Your Leadership Profile</h2>
-      <p>Based on your responses across all 10 scenarios</p>
-    </div>
-    <div id="primaryStyle"></div>
-    <div class="score-grid" id="scoreGrid"></div>
-    <div style="text-align:center">
-      <button class="retake-btn" onclick="retake()">Retake Assessment</button>
+  <div id="thankYou" class="hidden">
+    <div class="thankyou-card">
+      <div class="thankyou-icon">✓</div>
+      <h2>Thank You!</h2>
+      <p>Your assessment has been submitted successfully.<br>Your responses have been recorded and will be reviewed by the administrator.</p>
     </div>
   </div>
 </main>
 
 <script>
+// ── CONFIG: Replace with your email to receive submissions ──
+const ADMIN_EMAIL = 'rengarajan11@gmail.com';
+
+const letterLabels = { a: 'Director (A)', b: 'Persuader (B)', c: 'Stabiliser (C)', d: 'Analyst (D)' };
+let participant = { name: '', email: '' };
+
 const scenarios = [
   {
     title: "A friend loans you a book",
@@ -724,7 +856,7 @@ function updateProgress() {
   const hint = document.getElementById('submitHint');
   if (done === 10) {
     btn.disabled = false;
-    hint.textContent = 'All scenarios complete — view your results!';
+    hint.textContent = 'All scenarios complete — ready to submit';
   } else {
     btn.disabled = true;
     hint.textContent = `${10 - done} scenario${10-done !== 1 ? 's' : ''} remaining`;
@@ -744,69 +876,116 @@ function calcScores() {
   };
 }
 
-function showResults() {
-  const scores = calcScores();
-  const maxScore = Math.max(...Object.values(scores));
-  const maxPossible = 40; // 10 scenarios × max rank 4
+function startAssessment() {
+  const nameInput = document.getElementById('participantName');
+  const emailInput = document.getElementById('participantEmail');
+  const nameError = document.getElementById('nameError');
+  const emailError = document.getElementById('emailError');
+  let valid = true;
 
-  document.getElementById('quiz').style.display = 'none';
+  nameError.classList.remove('show');
+  emailError.classList.remove('show');
+  nameInput.classList.remove('invalid');
+  emailInput.classList.remove('invalid');
 
-  const primary = Object.entries(scores).sort((a,b) => b[1]-a[1])[0][0];
-  const sd = styleData[primary];
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
 
-  // Primary style block
-  document.getElementById('primaryStyle').innerHTML = `
-    <div class="primary-style">
-      <div class="label">Your Dominant Style</div>
-      <h3>${sd.label}</h3>
-      <p>${sd.desc}</p>
-      <div class="traits-grid">
-        <div class="trait-box">
-          <h4>Strengths</h4>
-          <ul>${sd.strengths.map(s => `<li>${s}</li>`).join('')}</ul>
-        </div>
-        <div class="trait-box weak">
-          <h4>Watch out for</h4>
-          <ul>${sd.weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>
-        </div>
-      </div>
-    </div>
-  `;
+  if (!name || name.length < 2) {
+    nameInput.classList.add('invalid');
+    nameError.classList.add('show');
+    valid = false;
+  }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    emailInput.classList.add('invalid');
+    emailError.classList.add('show');
+    valid = false;
+  }
+  if (!valid) return;
 
-  // Score grid
-  const types = ['director','persuader','stabiliser','analyst'];
-  const labels = ['Director (A)', 'Persuader (B)', 'Stabiliser (C)', 'Analyst (D)'];
-  document.getElementById('scoreGrid').innerHTML = types.map((t, i) => `
-    <div class="score-card ${t}">
-      <div class="role-label">${labels[i]}</div>
-      <div class="score-big">${scores[t]}</div>
-      <div class="score-bar-track">
-        <div class="score-bar-fill" style="width:${Math.round((scores[t]/maxPossible)*100)}%"></div>
-      </div>
-      <div class="score-note">out of ${maxPossible} points</div>
-    </div>
-  `).join('');
-
-  const results = document.getElementById('results');
-  results.classList.add('show');
-
-  // Animate bars after paint
-  setTimeout(() => {
-    document.querySelectorAll('.score-bar-fill').forEach(el => {
-      el.style.width = el.style.width; // trigger repaint already set
-    });
-  }, 50);
+  participant = { name, email };
+  document.getElementById('registration').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  document.getElementById('progressBar').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function retake() {
-  for (let i = 0; i < 10; i++) {
-    rankings[i] = {a: null, b: null, c: null, d: null};
-    refreshScenario(i);
+function buildReport() {
+  const scores = calcScores();
+  const maxPossible = 40;
+  const primary = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const sd = styleData[primary];
+  const types = ['director', 'persuader', 'stabiliser', 'analyst'];
+  const typeLabels = ['Director (A)', 'Persuader (B)', 'Stabiliser (C)', 'Analyst (D)'];
+
+  let report = `LEADERSHIP STYLE ASSESSMENT RESULTS\n`;
+  report += `${'='.repeat(40)}\n\n`;
+  report += `Participant: ${participant.name}\n`;
+  report += `Email: ${participant.email}\n`;
+  report += `Submitted: ${new Date().toLocaleString()}\n\n`;
+  report += `DOMINANT STYLE: ${sd.label}\n`;
+  report += `${sd.desc}\n\n`;
+  report += `SCORES (out of ${maxPossible} each):\n`;
+  types.forEach((t, i) => {
+    report += `  ${typeLabels[i]}: ${scores[t]} (${Math.round((scores[t] / maxPossible) * 100)}%)\n`;
+  });
+  report += `\nStrengths: ${sd.strengths.join(', ')}\n`;
+  report += `Watch out for: ${sd.weaknesses.join(', ')}\n\n`;
+  report += `${'='.repeat(40)}\n`;
+  report += `DETAILED ANSWERS\n`;
+  report += `${'='.repeat(40)}\n\n`;
+
+  scenarios.forEach((sc, si) => {
+    report += `Scenario ${si + 1}: ${sc.title}\n`;
+    const sorted = sc.options
+      .map(opt => ({ ...opt, rank: rankings[si][opt.letter] }))
+      .sort((a, b) => b.rank - a.rank);
+    sorted.forEach(opt => {
+      report += `  [Rank ${opt.rank}] ${letterLabels[opt.letter]}: ${opt.text}\n`;
+    });
+    report += '\n';
+  });
+
+  return { report, scores, primary, sd };
+}
+
+async function submitAssessment() {
+  const btn = document.getElementById('submitBtn');
+  const hint = document.getElementById('submitHint');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.textContent = 'Submitting…';
+  hint.textContent = 'Please wait while we send your responses…';
+
+  const { report, sd } = buildReport();
+
+  try {
+    const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ADMIN_EMAIL)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name: participant.name,
+        email: participant.email,
+        _subject: `Leadership Assessment — ${participant.name} (${sd.label})`,
+        message: report,
+        _captcha: 'false',
+        _template: 'table'
+      })
+    });
+
+    if (!response.ok) throw new Error('Submission failed');
+
+    document.getElementById('quiz').classList.add('hidden');
+    document.getElementById('progressBar').classList.add('hidden');
+    document.getElementById('thankYou').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (err) {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.textContent = 'Submit Assessment';
+    hint.textContent = 'Something went wrong. Please try submitting again.';
+    hint.style.color = '#dc2626';
   }
-  updateProgress();
-  document.getElementById('results').classList.remove('show');
-  document.getElementById('quiz').style.display = 'block';
-  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 buildUI();
