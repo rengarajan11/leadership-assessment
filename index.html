@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leadership Style Assessment</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a2e;
+    --ink-mid: #4a4a6a;
+    --ink-light: #9090b0;
+    --page: #f7f6f2;
+    --surface: #ffffff;
+    --rule: #e4e2dc;
+
+    --director: #c0392b;
+    --director-soft: #fdf0ee;
+    --persuader: #2471a3;
+    --persuader-soft: #eaf3fb;
+    --stabiliser: #1e8449;
+    --stabiliser-soft: #eafaf1;
+    --analyst: #7d3c98;
+    --analyst-soft: #f5eef8;
+
+    --accent: #2c3e7a;
+    --accent-light: #eef0f9;
+
+    --radius: 10px;
+    --shadow: 0 2px 16px rgba(26,26,46,0.08);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--page);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 48px 32px 40px;
+    text-align: center;
+  }
+  header .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.15;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .progress-bar-wrap .label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-mid);
+    white-space: nowrap;
+    min-width: 90px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 5px;
+    background: var(--rule);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-pct {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── INSTRUCTION ── */
+  .instruction-card {
+    background: var(--accent-light);
+    border: 1px solid #c7cce8;
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 36px;
+    font-size: 13.5px;
+    color: var(--ink-mid);
+    line-height: 1.7;
+  }
+  .instruction-card strong { color: var(--accent); }
+
+  /* ── SCENARIO CARD ── */
+  .scenario {
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    transition: box-shadow 0.2s;
+  }
+  .scenario:hover { box-shadow: 0 4px 24px rgba(26,26,46,0.11); }
+
+  .scenario-header {
+    background: var(--ink);
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .scenario-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+    color: rgba(255,255,255,0.85);
+  }
+  .scenario-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  .scenario-status {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .scenario-status.incomplete {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+  }
+  .scenario-status.complete {
+    background: #22c55e;
+    color: #fff;
+  }
+
+  .scenario-body { padding: 20px 24px 24px; }
+
+  .rank-guide {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .rank-guide span {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .rg-1 { background: #fff0f0; color: #c0392b; border: 1px solid #fdc8c8; }
+  .rg-2 { background: #fff8ec; color: #d97706; border: 1px solid #fde68a; }
+  .rg-3 { background: #f0f7ff; color: #2563eb; border: 1px solid #bfdbfe; }
+  .rg-4 { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+  /* ── OPTION ROW ── */
+  .option {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1.5px solid var(--rule);
+    background: #fafafa;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .option:last-child { margin-bottom: 0; }
+  .option.has-rank { background: var(--accent-light); border-color: #c7cce8; }
+  .option-letter {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  .option-text {
+    font-size: 13.5px;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+
+  /* ── RANK BUTTONS ── */
+  .rank-buttons {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .rank-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1.5px solid var(--rule);
+    background: var(--surface);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--ink-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rank-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  .rank-btn.selected-1 { background: #fef2f2; border-color: #ef4444; color: #dc2626; }
+  .rank-btn.selected-2 { background: #fffbeb; border-color: #f59e0b; color: #d97706; }
+  .rank-btn.selected-3 { background: #eff6ff; border-color: #3b82f6; color: #2563eb; }
+  .rank-btn.selected-4 { background: #f0fdf4; border-color: #22c55e; color: #16a34a; }
+  .rank-btn.disabled { opacity: 0.28; cursor: not-allowed; }
+  .rank-btn.disabled:hover {
+    border-color: var(--rule);
+    background: var(--surface);
+    color: var(--ink-mid);
+  }
+
+  /* ── CONFLICT NOTICE ── */
+  .conflict-notice {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #856404;
+    margin-top: 14px;
+    display: none;
+  }
+  .conflict-notice.visible { display: block; }
+
+  /* ── SUBMIT AREA ── */
+  .submit-area {
+    text-align: center;
+    margin-top: 48px;
+  }
+  .submit-btn {
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 16px 44px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .submit-btn:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(44,62,122,0.25); }
+  .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+  .submit-hint {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  /* ── RESULTS ── */
+  #results {
+    display: none;
+  }
+  #results.show { display: block; }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .results-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .results-header p { color: var(--ink-mid); font-size: 14px; }
+
+  .score-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  @media (max-width: 480px) { .score-grid { grid-template-columns: 1fr; } }
+
+  .score-card {
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    border: 1.5px solid transparent;
+  }
+  .score-card.director   { background: var(--director-soft); border-color: #f1948a; }
+  .score-card.persuader  { background: var(--persuader-soft); border-color: #7fb3d3; }
+  .score-card.stabiliser { background: var(--stabiliser-soft); border-color: #82e0aa; }
+  .score-card.analyst    { background: var(--analyst-soft); border-color: #c39bd3; }
+
+  .score-card .role-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .score-card.director   .role-label { color: var(--director); }
+  .score-card.persuader  .role-label { color: var(--persuader); }
+  .score-card.stabiliser .role-label { color: var(--stabiliser); }
+  .score-card.analyst    .role-label { color: var(--analyst); }
+
+  .score-card .score-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-card.director   .score-big { color: var(--director); }
+  .score-card.persuader  .score-big { color: var(--persuader); }
+  .score-card.stabiliser .score-big { color: var(--stabiliser); }
+  .score-card.analyst    .score-big { color: var(--analyst); }
+
+  .score-card .score-bar-track {
+    height: 6px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 99px;
+    margin: 10px 0 8px;
+    overflow: hidden;
+  }
+  .score-card .score-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.8s cubic-bezier(.4,0,.2,1);
+  }
+  .score-card.director   .score-bar-fill { background: var(--director); }
+  .score-card.persuader  .score-bar-fill { background: var(--persuader); }
+  .score-card.stabiliser .score-bar-fill { background: var(--stabiliser); }
+  .score-card.analyst    .score-bar-fill { background: var(--analyst); }
+
+  .score-card .score-note { font-size: 12px; color: var(--ink-mid); }
+
+  .primary-style {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 14px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .primary-style .label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 8px;
+  }
+  .primary-style h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+  .primary-style p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; }
+
+  .traits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 480px) { .traits-grid { grid-template-columns: 1fr; } }
+
+  .trait-box {
+    background: rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .trait-box h4 { font-size: 12px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; }
+  .trait-box ul { list-style: none; }
+  .trait-box ul li { font-size: 12.5px; color: rgba(255,255,255,0.8); padding: 2px 0; }
+  .trait-box ul li::before { content: '+ '; color: rgba(255,255,255,0.3); }
+  .trait-box.weak ul li::before { content: '– '; color: rgba(255,255,255,0.3); }
+
+  .retake-btn {
+    display: block;
+    margin: 0 auto;
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    padding: 12px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 20px;
+  }
+  .retake-btn:hover { background: var(--ink); color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Self-Assessment · Renga Rajan</div>
+  <h1>Understanding Your<br>Leadership Style</h1>
+  <p>Rank each option from 4 (most like you) to 1 (least like you). Every scenario must have a unique rank for each choice.</p>
+</header>
+
+<div class="progress-bar-wrap">
+  <span class="label" id="progressLabel">0 of 10 done</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+</div>
+
+<main>
+  <div id="quiz">
+    <div class="instruction-card">
+      <strong>How to rank:</strong> For each situation, assign <strong>4</strong> to the choice most like you, <strong>3</strong> to the next, <strong>2</strong>, then <strong>1</strong> (least like you). Each number can only be used once per scenario.
+    </div>
+
+    <div id="scenarios"></div>
+
+    <div class="submit-area">
+      <button class="submit-btn" id="submitBtn" disabled onclick="showResults()">View My Results</button>
+      <div class="submit-hint" id="submitHint">Complete all 10 scenarios to see your results</div>
+    </div>
+  </div>
+
+  <div id="results">
+    <div class="results-header">
+      <h2>Your Leadership Profile</h2>
+      <p>Based on your responses across all 10 scenarios</p>
+    </div>
+    <div id="primaryStyle"></div>
+    <div class="score-grid" id="scoreGrid"></div>
+    <div style="text-align:center">
+      <button class="retake-btn" onclick="retake()">Retake Assessment</button>
+    </div>
+  </div>
+</main>
+
+<script>
+const scenarios = [
+  {
+    title: "A friend loans you a book",
+    options: [
+      { letter: 'a', text: 'You want to know the ending before you waste your time reading it.' },
+      { letter: 'b', text: 'You would rather discuss the book with your friends.' },
+      { letter: 'c', text: 'You have already read the book but take it anyway so as not to hurt your friend\'s feelings.' },
+      { letter: 'd', text: 'You take the book but make a record of who you borrowed it from so you can give it back.' }
+    ]
+  },
+  {
+    title: "You are waiting for an elevator",
+    options: [
+      { letter: 'a', text: 'You will wait in line but if it is late, you will take the stairs.' },
+      { letter: 'b', text: 'You look on the crowded elevator as a chance to get to know some other folks in the building.' },
+      { letter: 'c', text: 'You stand aside for others to get on first.' },
+      { letter: 'd', text: 'You count the number of occupants; if it\'s over the posted limit, you think the folks who got on last should wait for the next one.' }
+    ]
+  },
+  {
+    title: "You are shopping for a new car",
+    options: [
+      { letter: 'a', text: 'You want to know how fast it will go and the size of the engine.' },
+      { letter: 'b', text: 'You drive across town to buy it from a long-time friend.' },
+      { letter: 'c', text: 'You look at the standard model and are not interested in the deluxe package of accessories.' },
+      { letter: 'd', text: 'You ask the price and check it against prices you got from shopping at other dealers.' }
+    ]
+  },
+  {
+    title: "Your career is in aviation",
+    options: [
+      { letter: 'a', text: 'You are a pilot, controlling the aircraft.' },
+      { letter: 'b', text: 'You are an agent, behind the counter, dealing with customers — tickets, seat assignments, etc.' },
+      { letter: 'c', text: 'You are in customer service, calming customers and solving their problems — lost luggage, canceled flights, etc.' },
+      { letter: 'd', text: 'You are a flight controller, keeping flights safe and well-coordinated.' }
+    ]
+  },
+  {
+    title: "You take a vacation",
+    options: [
+      { letter: 'a', text: 'You fly to a resort and play golf while the family is at the pool.' },
+      { letter: 'b', text: 'You head for a party town with party clothes and lots of money.' },
+      { letter: 'c', text: 'You go to the beach and take along several books, your swimsuit and plenty of suntan lotion.' },
+      { letter: 'd', text: 'You plan an itinerary with mileage, stops, driving hours and estimated gasoline consumption.' }
+    ]
+  },
+  {
+    title: "You work at a desk",
+    options: [
+      { letter: 'a', text: 'Your desk is messy but it doesn\'t bother you at all.' },
+      { letter: 'b', text: 'Your desk is messy and you don\'t want to admit you can\'t find anything on it, and you don\'t want anyone to see.' },
+      { letter: 'c', text: 'It has piles of papers but you know what is in every pile and can find anything on the desk.' },
+      { letter: 'd', text: 'Your desk is not messy — everything is properly filed.' }
+    ]
+  },
+  {
+    title: "You have a large lawn",
+    options: [
+      { letter: 'a', text: 'You mow your lawn early on Saturday so you can get on about your business.' },
+      { letter: 'b', text: 'You belong to the garden club and enjoy meeting with gardeners.' },
+      { letter: 'c', text: 'You have a garden and like to use the produce from it.' },
+      { letter: 'd', text: 'It is weedless and it bothers you when neighbors allow their lawns to get weedy.' }
+    ]
+  },
+  {
+    title: "You have a pet",
+    options: [
+      { letter: 'a', text: 'You have a large animal that helps protect your property.' },
+      { letter: 'b', text: 'You have a small, cuddly animal.' },
+      { letter: 'c', text: 'You have more than one pet.' },
+      { letter: 'd', text: 'You have a pet; it is housebroken but stays outside in a more than adequate shelter.' }
+    ]
+  },
+  {
+    title: "You play games for amusement",
+    options: [
+      { letter: 'a', text: 'You play outdoor sports such as softball, football, soccer or golf — or you walk or jog.' },
+      { letter: 'b', text: 'You play dumb charades or other party games.' },
+      { letter: 'c', text: 'You would really rather read.' },
+      { letter: 'd', text: 'You play games such as chess, checkers, bridge, or trivia.' }
+    ]
+  },
+  {
+    title: "When you go out to eat",
+    options: [
+      { letter: 'a', text: 'You prefer a seafood place, or a buffet/cafeteria.' },
+      { letter: 'b', text: 'You prefer the family restaurant where there is music and lots of people.' },
+      { letter: 'c', text: 'You like something simple like sandwiches or pizza.' },
+      { letter: 'd', text: 'You prefer a place that has reservations rather than first-come, first-served.' }
+    ]
+  }
+];
+
+const styleData = {
+  director: {
+    label: 'Director',
+    desc: 'You are results-driven and action-oriented. You take charge, make quick decisions, and thrive on challenges. You prefer to lead from the front and are not afraid to take risks to reach your goals.',
+    strengths: ['Quick results','Takes initiative','Loves challenges','Strong-willed','Problem solver'],
+    weaknesses: ['Can seem hasty','Takes big risks','Impatient','Can be stubborn','Sometimes intimidating']
+  },
+  persuader: {
+    label: 'Persuader',
+    desc: 'You are a natural people-person — optimistic, enthusiastic, and motivating. You build relationships easily and bring energy and positivity to any group or situation.',
+    strengths: ['Cheerful & optimistic','Great communicator','Sociable & friendly','Motivating','Makes good impressions'],
+    weaknesses: ['Can be naive','Neglects tasks','May overlook reality','Sometimes evasive','Not always taken seriously']
+  },
+  stabiliser: {
+    label: 'Stabiliser',
+    desc: 'You are reliable, consistent, and a calming presence. You value standards, loyalty, and dependability. You prefer harmony and are a skilled listener who keeps things on an even keel.',
+    strengths: ['Dependable & loyal','Patient listener','Maintains standards','Focused & unflappable','Provides calm'],
+    weaknesses: ['Resistant to change','Can seem inflexible','Resists multiple priorities','Responds poorly to crisis','Can appear passive']
+  },
+  analyst: {
+    label: 'Analyst',
+    desc: 'You are detail-oriented, precise, and systematic. You seek excellence through accuracy and critical thinking. You prefer predictability and careful planning before acting.',
+    strengths: ['Detail-oriented','Accurate & careful','Critical thinker','Diligent & obedient','Seeks excellence'],
+    weaknesses: ['Can be negative','Seems aloof','Slow decision maker','Resists delegating','Can bottle up feelings']
+  }
+};
+
+// State: rankings[scenarioIndex][optionLetter] = rank (1–4) | null
+const rankings = Array.from({length: 10}, () => ({a: null, b: null, c: null, d: null}));
+
+function buildUI() {
+  const container = document.getElementById('scenarios');
+  scenarios.forEach((sc, si) => {
+    const card = document.createElement('div');
+    card.className = 'scenario';
+    card.id = `scenario-${si}`;
+
+    card.innerHTML = `
+      <div class="scenario-header">
+        <div class="scenario-num">${si + 1}</div>
+        <div class="scenario-title">${sc.title}</div>
+        <span class="scenario-status incomplete" id="status-${si}">Not done</span>
+      </div>
+      <div class="scenario-body">
+        <div class="rank-guide">
+          <span class="rg-1">1 — Least like me</span>
+          <span class="rg-2">2</span>
+          <span class="rg-3">3</span>
+          <span class="rg-4">4 — Most like me</span>
+        </div>
+        ${sc.options.map(opt => `
+          <div class="option" id="option-${si}-${opt.letter}">
+            <div class="option-letter">${opt.letter}</div>
+            <div class="option-text">${opt.text}</div>
+            <div class="rank-buttons" id="btns-${si}-${opt.letter}">
+              ${[1,2,3,4].map(r => `<button class="rank-btn" data-s="${si}" data-o="${opt.letter}" data-r="${r}" onclick="setRank(${si},'${opt.letter}',${r})">${r}</button>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+        <div class="conflict-notice" id="conflict-${si}">⚠ Each rank (1–4) can only be used once per scenario. Please adjust your rankings.</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function setRank(si, letter, rank) {
+  const scene = rankings[si];
+  // If this option already has this rank, clear it
+  if (scene[letter] === rank) {
+    scene[letter] = null;
+  } else {
+    // Clear the same rank from any other option in this scenario
+    for (const k of ['a','b','c','d']) {
+      if (k !== letter && scene[k] === rank) scene[k] = null;
+    }
+    scene[letter] = rank;
+  }
+  refreshScenario(si);
+  updateProgress();
+}
+
+function refreshScenario(si) {
+  const scene = rankings[si];
+  const usedRanks = new Set(Object.values(scene).filter(v => v !== null));
+  const complete = usedRanks.size === 4;
+
+  // Update status badge
+  const status = document.getElementById(`status-${si}`);
+  status.textContent = complete ? '✓ Complete' : `${usedRanks.size}/4 ranked`;
+  status.className = `scenario-status ${complete ? 'complete' : 'incomplete'}`;
+
+  for (const letter of ['a','b','c','d']) {
+    const myRank = scene[letter];
+    const optDiv = document.getElementById(`option-${si}-${letter}`);
+    optDiv.className = `option${myRank ? ' has-rank' : ''}`;
+
+    const btns = optDiv.querySelectorAll('.rank-btn');
+    btns.forEach(btn => {
+      const r = parseInt(btn.dataset.r);
+      btn.className = 'rank-btn';
+      if (myRank === r) {
+        btn.classList.add(`selected-${r}`);
+      } else if (usedRanks.has(r) && myRank !== r) {
+        btn.classList.add('disabled');
+      }
+    });
+  }
+
+  // Conflict check (shouldn't happen but just in case)
+  const conflict = document.getElementById(`conflict-${si}`);
+  conflict.className = 'conflict-notice';
+}
+
+function updateProgress() {
+  let done = 0;
+  for (let i = 0; i < 10; i++) {
+    const vals = Object.values(rankings[i]).filter(v => v !== null);
+    if (new Set(vals).size === 4) done++;
+  }
+  const pct = Math.round((done / 10) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done} of 10 done`;
+
+  const btn = document.getElementById('submitBtn');
+  const hint = document.getElementById('submitHint');
+  if (done === 10) {
+    btn.disabled = false;
+    hint.textContent = 'All scenarios complete — view your results!';
+  } else {
+    btn.disabled = true;
+    hint.textContent = `${10 - done} scenario${10-done !== 1 ? 's' : ''} remaining`;
+  }
+}
+
+function calcScores() {
+  const totals = {a: 0, b: 0, c: 0, d: 0};
+  for (const scene of rankings) {
+    for (const k of ['a','b','c','d']) totals[k] += (scene[k] || 0);
+  }
+  return {
+    director: totals.a,
+    persuader: totals.b,
+    stabiliser: totals.c,
+    analyst: totals.d
+  };
+}
+
+function showResults() {
+  const scores = calcScores();
+  const maxScore = Math.max(...Object.values(scores));
+  const maxPossible = 40; // 10 scenarios × max rank 4
+
+  document.getElementById('quiz').style.display = 'none';
+
+  const primary = Object.entries(scores).sort((a,b) => b[1]-a[1])[0][0];
+  const sd = styleData[primary];
+
+  // Primary style block
+  document.getElementById('primaryStyle').innerHTML = `
+    <div class="primary-style">
+      <div class="label">Your Dominant Style</div>
+      <h3>${sd.label}</h3>
+      <p>${sd.desc}</p>
+      <div class="traits-grid">
+        <div class="trait-box">
+          <h4>Strengths</h4>
+          <ul>${sd.strengths.map(s => `<li>${s}</li>`).join('')}</ul>
+        </div>
+        <div class="trait-box weak">
+          <h4>Watch out for</h4>
+          <ul>${sd.weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Score grid
+  const types = ['director','persuader','stabiliser','analyst'];
+  const labels = ['Director (A)', 'Persuader (B)', 'Stabiliser (C)', 'Analyst (D)'];
+  document.getElementById('scoreGrid').innerHTML = types.map((t, i) => `
+    <div class="score-card ${t}">
+      <div class="role-label">${labels[i]}</div>
+      <div class="score-big">${scores[t]}</div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill" style="width:${Math.round((scores[t]/maxPossible)*100)}%"></div>
+      </div>
+      <div class="score-note">out of ${maxPossible} points</div>
+    </div>
+  `).join('');
+
+  const results = document.getElementById('results');
+  results.classList.add('show');
+
+  // Animate bars after paint
+  setTimeout(() => {
+    document.querySelectorAll('.score-bar-fill').forEach(el => {
+      el.style.width = el.style.width; // trigger repaint already set
+    });
+  }, 50);
+}
+
+function retake() {
+  for (let i = 0; i < 10; i++) {
+    rankings[i] = {a: null, b: null, c: null, d: null};
+    refreshScenario(i);
+  }
+  updateProgress();
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('quiz').style.display = 'block';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+buildUI();
+updateProgress();
+</script>
+</body>
+</html>
