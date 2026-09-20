@@ -1,51 +1,577 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Leadership Style Assessment</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#f7f6f2;color:#1a1a2e;font:15px/1.6 Inter,Arial,sans-serif}header{padding:44px 20px 32px;text-align:center;background:#1a1a2e;color:#fff}header h1{margin:12px 0 8px;font:48px/1.08 'DM Serif Display',serif}header p{color:#d8d7e1}.wrap{max-width:1080px;margin:36px auto;padding:0 20px}.card,.instructions,.scenario{background:#fff;border:1px solid #e6e3dc;border-radius:14px;padding:28px;margin-bottom:22px}.card h2{font:32px 'DM Serif Display',serif;margin:0 0 8px}.form-group{margin:18px 0}.form-group label{display:block;font-weight:600;margin-bottom:6px}input{width:100%;padding:13px;border:1px solid #c9c7c1;border-radius:7px;font:inherit}.primary-btn{background:#1a1a2e;color:#fff;border:0;border-radius:7px;padding:13px 20px;font:600 15px Inter;cursor:pointer}.hidden{display:none!important}.progress{height:7px;background:#dedde1}.progress-fill{height:100%;background:#b94133;width:0;transition:.2s}.scenario h3{font:24px 'DM Serif Display',serif;margin:0 0 14px}.option{display:flex;align-items:center;gap:12px;border-top:1px solid #eee;padding:12px 0}.option p{flex:1;margin:0}.rank-buttons{display:flex;gap:5px}.rank-buttons button{width:32px;height:32px;border:1px solid #c6c4c0;background:#fff;border-radius:50%;cursor:pointer}.rank-buttons button.selected{background:#1a1a2e;color:#fff}.rank-buttons button:disabled{opacity:.35}.hint{color:#b94133;font-weight:600}.thanks{text-align:center;color:#21834c;font-size:20px;font-weight:700}.report h2{text-align:center;font:48px 'DM Serif Display',serif;margin:0;color:#131b3b}.report-sub{text-align:center;color:#304670;font-size:20px;margin:12px 0 42px}.profile{background:#1a1a2e;color:#fff;border-radius:20px;padding:50px 48px}.eyebrow{color:#9da0b0;font-weight:700;letter-spacing:2px}.profile h3{font:40px 'DM Serif Display',serif;margin:20px 0}.profile-desc{font-size:20px;color:#d7d7e3}.traits,.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.trait{background:#29293f;border-radius:12px;padding:20px 24px}.trait h4{color:#a9aabc;margin:0 0 12px}.trait div{margin:8px 0}.score-grid{margin-top:42px}.score{border:2px solid;border-radius:17px;padding:30px}.score.director{border-color:#ff8076;background:#fff1ee;color:#c33529}.score.persuader{border-color:#72b4df;background:#eef8ff;color:#2377aa}.score.stabiliser{border-color:#64d99e;background:#effff5;color:#15884b}.score.analyst{border-color:#c796de;background:#fcf4ff;color:#843ca0}.score h4{letter-spacing:2px;margin:0}.score strong{display:block;font:64px 'DM Serif Display';margin:12px 0}.bar{height:8px;background:#dddde0;border-radius:4px}.bar span{display:block;height:100%;background:currentColor;border-radius:4px}.score small{display:block;margin-top:10px;color:#304670}.capture{position:absolute;left:-10000px;top:0;width:900px;background:#fff;padding:35px;color:#1a1a2e}.answer{border-bottom:1px solid #ddd;padding:12px 0}@media(max-width:700px){header h1{font-size:38px}.traits,.score-grid{grid-template-columns:1fr}.profile{padding:30px 22px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Leadership Style Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f6f2;
+      color: #1a1a2e;
+      font: 15px/1.6 Inter, Arial, sans-serif;
+    }
+    header {
+      padding: 44px 20px 32px;
+      text-align: center;
+      background: #1a1a2e;
+      color: #fff;
+    }
+    header h1 {
+      margin: 12px 0 8px;
+      font: 48px/1.08 'DM Serif Display', serif;
+    }
+    header p { color: #d8d7e1; }
+    .wrap { max-width: 1080px; margin: 36px auto; padding: 0 20px; }
+    .card, .instructions, .scenario {
+      background: #fff;
+      border: 1px solid #e6e3dc;
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 22px;
+    }
+    .card h2 { font: 32px 'DM Serif Display', serif; margin: 0 0 8px; }
+    .form-group { margin: 18px 0; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #c9c7c1;
+      border-radius: 7px;
+      font: inherit;
+    }
+    .primary-btn {
+      background: #1a1a2e;
+      color: #fff;
+      border: 0;
+      border-radius: 7px;
+      padding: 13px 20px;
+      font: 600 15px Inter;
+      cursor: pointer;
+    }
+    .hidden { display: none !important; }
+    .progress { height: 7px; background: #dedde1; }
+    .progress-fill { height: 100%; background: #b94133; width: 0; transition: 0.2s; }
+    .scenario h3 { font: 24px 'DM Serif Display', serif; margin: 0 0 14px; }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid #eee;
+      padding: 12px 0;
+    }
+    .option p { flex: 1; margin: 0; }
+    .rank-buttons { display: flex; gap: 5px; }
+    .rank-buttons button {
+      width: 32px; height: 32px;
+      border: 1px solid #c6c4c0;
+      background: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .rank-buttons button.selected {
+      background: #1a1a2e;
+      color: #fff;
+    }
+    .rank-buttons button:disabled { opacity: 0.35; cursor: not-allowed; }
+    .hint { color: #b94133; font-weight: 600; }
+    .thanks {
+      text-align: center;
+      color: #21834c;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .report h2 {
+      text-align: center;
+      font: 48px 'DM Serif Display', serif;
+      margin: 0;
+      color: #131b3b;
+    }
+    .report-sub {
+      text-align: center;
+      color: #304670;
+      font-size: 20px;
+      margin: 12px 0 42px;
+    }
+    .profile {
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 20px;
+      padding: 50px 48px 48px;
+    }
+    .eyebrow { color: #9da0b0; font-weight: 700; letter-spacing: 2px; }
+    .profile h3 { font: 40px 'DM Serif Display', serif; margin: 20px 0 25px; }
+    .profile-desc { font-size: 20px; color: #d7d7e3; margin: 0 0 28px; }
+    .traits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .trait {
+      background: #29293f;
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+    .trait h4 { color: #a9aabc; margin: 0 0 12px; font-size: 18px; }
+    .trait div { margin: 8px 0; }
+    .score-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 42px;
+    }
+    .score {
+      border: 2px solid;
+      border-radius: 17px;
+      padding: 30px;
+    }
+    .score.director { border-color: #ff8076; background: #fff1ee; color: #c33529; }
+    .score.persuader { border-color: #72b4df; background: #eef8ff; color: #2377aa; }
+    .score.stabiliser { border-color: #64d99e; background: #effff5; color: #15884b; }
+    .score.analyst { border-color: #c796de; background: #fcf4ff; color: #843ca0; }
+    .score h4 { letter-spacing: 2px; margin: 0; font-size: 16px; }
+    .score strong {
+      display: block;
+      font: 64px 'DM Serif Display', serif;
+      margin: 12px 0;
+    }
+    .bar {
+      height: 8px;
+      background: #dddde0;
+      border-radius: 4px;
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      background: currentColor;
+      border-radius: 4px;
+    }
+    .score small {
+      display: block;
+      margin-top: 10px;
+      color: #304670;
+      font-size: 16px;
+    }
+    .capture {
+      position: absolute;
+      left: -10000px;
+      top: 0;
+      width: 900px;
+      background: #fff;
+      padding: 35px;
+      color: #1a1a2e;
+    }
+    .answer { border-bottom: 1px solid #ddd; padding: 12px 0; }
+    .answer:last-child { border-bottom: 0; }
+    @media (max-width: 700px) {
+      header h1 { font-size: 38px; }
+      .traits, .score-grid { grid-template-columns: 1fr; }
+      .profile { padding: 30px 22px; }
+    }
+  </style>
 </head>
 <body>
-<header><div>SELF-ASSESSMENT · RENGA RAJAN</div><h1>Understanding Your<br>Leadership Style</h1><p>Rank every option from 4 (most like you) to 1 (least like you). Use each rank once per question.</p></header>
-<div id="progressWrap" class="hidden"><div class="progress"><div id="progressFill" class="progress-fill"></div></div></div>
-<main class="wrap">
-<section id="registration" class="card"><h2>Before We Begin</h2><p>Please enter your details to start the assessment.</p><div class="form-group"><label for="participantName">Full Name *</label><input id="participantName" autocomplete="name"></div><div class="form-group"><label for="participantEmail">Email *</label><input id="participantEmail" type="email" autocomplete="email"></div><button id="startBtn" class="primary-btn" type="button">Start Assessment</button><p id="registrationHint" class="hint"></p></section>
-<section id="quiz" class="hidden"><div class="instructions"><b>How to rank:</b> Assign 4 to the option most like you, then 3, 2 and 1. Each number can only be used once per question.</div><div id="questions"></div><p id="hint" class="hint"></p><button id="submitBtn" class="primary-btn" type="button">See My Results</button></section>
-<section id="thankYou" class="card hidden"><p class="thanks">Thanks for your submission!</p><div id="result"></div><p id="mailStatus" class="hint"></p></section>
-</main>
-<script>
-const MAIL_ENDPOINT='https://script.google.com/macros/s/AKfycby11mbGQWrW4j6BfRxP5SBtUBFcvQMIi2t6Vsz4Z4uzuqEDdE6moIMTWu7s2KYN0-8X/exec';
-const labels={a:'Director (A)',b:'Persuader (B)',c:'Stabiliser (C)',d:'Analyst (D)'};
-const scenarios=[
-['A friend loans you a book',['You want to know the ending before you waste your time reading it.','You would rather discuss the book with your friends.','You have already read the book but take it anyway so as not to hurt your friend’s feelings.','You take the book but make a record of who you borrowed it from so you can give it back.']],
-['You are waiting for an elevator',['You will wait in line but if it is late, you will take the stairs.','You look on the crowded elevator as a chance to get to know some other folks in the building.','You stand aside for others to get on first.','You count the number of occupants; if it is over the posted limit, you wait for the next one.']],
-['You are shopping for a new car',['You want to know how fast it will go and the size of the engine.','You drive across town to buy it from a long-time friend.','You look at the standard model and are not interested in the deluxe package of accessories.','You ask the price and check it against prices you got from shopping at other dealers.']],
-['Your career is in aviation',['You are a pilot, controlling the aircraft.','You are an agent, behind the counter, dealing with customers — tickets, seat assignments, etc.','You are in customer service, calming customers and solving their problems — lost luggage, canceled flights, etc.','You are a flight controller, keeping flights safe and well-coordinated.']],
-['You take a vacation',['You fly to a resort and play golf while the family is at the pool.','You head for a party town with party clothes and lots of money.','You go to the beach and take along several books, your swimsuit and plenty of suntan lotion.','You plan an itinerary with mileage, stops, driving hours and estimated gasoline consumption.']],
-['You work at a desk',['Your desk is messy but it doesn’t bother you at all.','Your desk is messy and you don’t want to admit you can’t find anything on it, and you don’t want anyone to see.','It has piles of papers but you know what is in every pile and can find anything on the desk.','Your desk is not messy — everything is properly filed.']],
-['You have a large lawn',['You mow your lawn early on Saturday so you can get on about your business.','You belong to the garden club and enjoy meeting with gardeners.','You have a garden and like to use the produce from it.','It is weedless and it bothers you when neighbors allow their lawns to get weedy.']],
-['You have a pet',['You have a large animal that helps protect your property.','You have a small, cuddly animal.','You have more than one pet.','You have a pet; it is housebroken but stays outside in a more than adequate shelter.']],
-['You play games for amusement',['You play outdoor sports such as softball, football, soccer or golf — or you walk or jog.','You play dumb charades or other party games.','You would really rather read.','You play games such as chess, checkers, bridge, or trivia.']],
-['When you go out to eat',['You prefer a seafood place, or a buffet/cafeteria.','You prefer the family restaurant where there is music and lots of people.','You like something simple like sandwiches or pizza.','You prefer a place that has reservations rather than first-come, first-served.']]
-].map(([title,texts])=>({title,options:texts.map((text,i)=>({letter:'abcd'[i],text}))}));
-const styles={director:{label:'Director',desc:'You are results-driven and action-oriented. You take charge, make quick decisions and thrive on challenges.',strengths:['Results-driven','Decisive','Action-oriented','Competitive','Takes charge'],watch:['Can be impatient','May overlook details','Can seem forceful','May act too quickly','Finds delegating difficult']},persuader:{label:'Persuader',desc:'You are enthusiastic, persuasive, and people-oriented. You build relationships easily and bring energy to every group.',strengths:['Enthusiastic','Persuasive','People-oriented','Optimistic','Builds relationships'],watch:['Can be distracted','May overpromise','Can talk too much','May avoid routine','Can be impulsive']},stabiliser:{label:'Stabiliser',desc:'You are calm, dependable, and supportive. You value harmony, consistency, and strong relationships.',strengths:['Reliable','Patient','Supportive','Calm under pressure','Team-focused'],watch:['May resist change','Can avoid conflict','Slow to act','May put others first','Can be too cautious']},analyst:{label:'Analyst',desc:'You are detail-oriented, precise, and systematic. You seek excellence through accuracy and critical thinking. You prefer predictability and careful planning before acting.',strengths:['Detail-oriented','Accurate & careful','Critical thinker','Diligent & obedient','Seeks excellence'],watch:['Can be negative','Seems aloof','Slow decision maker','Resists delegating','Can bottle up feelings']}};
-const ranks=Array.from({length:10},()=>({a:null,b:null,c:null,d:null}));let participant={name:'',email:''};const $=id=>document.getElementById(id);const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function buildUI(){$('questions').innerHTML=scenarios.map((s,i)=>`<article class="scenario"><h3>${i+1}. ${esc(s.title)}</h3>${s.options.map(o=>`<div class="option" id="o${i}${o.letter}"><p><b>${o.letter.toUpperCase()}.</b> ${esc(o.text)}</p><div class="rank-buttons">${[1,2,3,4].map(r=>`<button type="button" data-i="${i}" data-l="${o.letter}" data-r="${r}">${r}</button>`).join('')}</div></div>`).join('')}</article>`).join('');document.querySelectorAll('.rank-buttons button').forEach(b=>b.onclick=()=>setRank(+b.dataset.i,b.dataset.l,+b.dataset.r))}
-function setRank(i,l,r){if(ranks[i][l]===r)ranks[i][l]=null;else{Object.keys(ranks[i]).forEach(k=>{if(k!==l&&ranks[i][k]===r)ranks[i][k]=null});ranks[i][l]=r}refresh(i);updateProgress()}function refresh(i){const used=new Set(Object.values(ranks[i]).filter(Boolean));Object.keys(ranks[i]).forEach(l=>document.querySelectorAll(`#o${i}${l} button`).forEach(b=>{const r=+b.dataset.r;b.classList.toggle('selected',r===ranks[i][l]);b.disabled=used.has(r)&&r!==ranks[i][l]}))}function updateProgress(){$('progressFill').style.width=ranks.filter(x=>Object.values(x).every(Boolean)).length*10+'%'}
-function scores(){const t={a:0,b:0,c:0,d:0};ranks.forEach(x=>Object.keys(t).forEach(k=>t[k]+=x[k]||0));return{director:t.a,persuader:t.b,stabiliser:t.c,analyst:t.d}}function report(){const s=scores(),primary=Object.keys(s).sort((a,b)=>s[b]-s[a])[0];return{scores:s,style:styles[primary]}}
-function startAssessment(){const n=$('participantName'),e=$('participantEmail');if(n.value.trim().length<2||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.value.trim())){$('registrationHint').textContent='Please enter a valid name and email.';return}participant={name:n.value.trim(),email:e.value.trim()};$('registration').classList.add('hidden');$('quiz').classList.remove('hidden');$('progressWrap').classList.remove('hidden');scrollTo(0,0)}
-function resultHTML(r){const entries=[['director','Director (A)'],['persuader','Persuader (B)'],['stabiliser','Stabiliser (C)'],['analyst','Analyst (D)']];return`<div id="profileReport" class="report"><h2>Your Leadership Profile</h2><div class="report-sub">Based on your responses across all 10 scenarios</div><div class="profile"><div class="eyebrow">YOUR DOMINANT STYLE</div><h3>${r.style.label}</h3><p class="profile-desc">${r.style.desc}</p><div class="traits"><div class="trait"><h4>Strengths</h4>${r.style.strengths.map(x=>`<div>＋ ${x}</div>`).join('')}</div><div class="trait"><h4>Watch out for</h4>${r.style.watch.map(x=>`<div>− ${x}</div>`).join('')}</div></div></div><div class="score-grid">${entries.map(([k,label])=>`<div class="score ${k}"><h4>${label}</h4><strong>${r.scores[k]}</strong><div class="bar"><span style="width:${r.scores[k]/40*100}%"></span></div><small>out of 40 points</small></div>`).join('')}</div></div>`}
-function answersHTML(){return`<div id="answersPage" class="capture"><h2>Assessment Answers</h2><p><b>Participant:</b> ${esc(participant.name)} (${esc(participant.email)})</p>${scenarios.map((s,i)=>{const ranked=s.options.map(option=>({option,rank:ranks[i][option.letter]})).sort((a,b)=>b.rank-a.rank);return`<div class="answer"><b>${i+1}. ${esc(s.title)}</b>${ranked.map(x=>`<div>Rank ${x.rank} — ${labels[x.option.letter]}: ${esc(x.option.text)}</div>`).join('')}</div>`}).join('')}</div>`}
-function b64(url){return url.split(',')[1]}
-async function makePDF(){const{jsPDF}=window.jspdf,pdf=new jsPDF({unit:'pt',format:'a4'}),m=24,w=pdf.internal.pageSize.getWidth()-48,h=pdf.internal.pageSize.getHeight()-48,p=await html2canvas($('profileReport'),{scale:1.5,backgroundColor:'#f7f6f2'}),a=await html2canvas($('answersPage'),{scale:1.5,backgroundColor:'#fff'});pdf.addImage(p.toDataURL('image/png'),'PNG',m,m,w,Math.min(h,w*p.height/p.width));pdf.addPage();pdf.addImage(a.toDataURL('image/png'),'PNG',m,m,w,Math.min(h,w*a.height/a.width));return pdf}
-async function sendResults(){const status=$('mailStatus');status.textContent='Preparing your image and PDF…';try{const image=await html2canvas($('profileReport'),{scale:1.5,backgroundColor:'#f7f6f2}),pdf=await makePDF(),payload={subject:`Leadership assessment: ${participant.name}`,participantName:participant.name,participantEmail:participant.email,htmlBody:'<p>Your leadership assessment results are attached.</p>',imageBase64:b64(image.toDataURL('image/png')),imageName:`${participant.name.replace(/\s+/g,'-')}-leadership-profile.png`,pdfBase64:b64(pdf.output('datauristring')),pdfName:`${participant.name.replace(/\s+/g,'-')}-leadership-assessment.pdf`};const response=await fetch(MAIL_ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}),text=await response.text();let data;try{data=JSON.parse(text)}catch(e){throw new Error('Invalid response from mail server: '+text)}if(!response.ok||!data.success)throw new Error(data.error||'Mail request failed.');status.textContent='Your image and PDF were emailed successfully.'}catch(error){console.error('Email error:',error);status.textContent='Results are shown above, but the email delivery failed. Check Apps Script deployment and execution logs.'}}
-function showResults(){if(!ranks.every(x=>Object.values(x).every(Boolean))){$('hint').textContent='Please rank all four options in every question.';return}const r=report();$('result').innerHTML=resultHTML(r)+answersHTML();$('quiz').classList.add('hidden');$('progressWrap').classList.add('hidden');$('thankYou').classList.remove('hidden');scrollTo(0,0);sendResults()}buildUI();$('startBtn').onclick=startAssessment;$('submitBtn').onclick=showResults;
-</script>
+  <header>
+    <div>SELF-ASSESSMENT · RENGA RAJAN</div>
+    <h1>Understanding Your<br>Leadership Style</h1>
+    <p>Rank every option from 4 (most like you) to 1 (least like you). Use each rank once per question.</p>
+  </header>
+
+  <div id="progressWrap" class="hidden">
+    <div class="progress"><div id="progressFill" class="progress-fill"></div></div>
+  </div>
+
+  <main class="wrap">
+    <section id="registration" class="card">
+      <h2>Before We Begin</h2>
+      <p>Please enter your details to start the assessment.</p>
+      <div class="form-group">
+        <label for="participantName">Full Name *</label>
+        <input id="participantName" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="participantEmail">Email *</label>
+        <input id="participantEmail" type="email" autocomplete="email">
+      </div>
+      <button id="startBtn" class="primary-btn" type="button">Start Assessment</button>
+      <p id="registrationHint" class="hint"></p>
+    </section>
+
+    <section id="quiz" class="hidden">
+      <div class="instructions"><b>How to rank:</b> Assign 4 to the option most like you, then 3, 2 and 1. Each number can only be used once per question.</div>
+      <div id="questions"></div>
+      <p id="hint" class="hint"></p>
+      <button id="submitBtn" class="primary-btn" type="button">See My Results</button>
+    </section>
+
+    <section id="thankYou" class="card hidden">
+      <p class="thanks">Thanks for your submission!</p>
+      <div id="result"></div>
+      <p id="mailStatus" class="hint"></p>
+    </section>
+  </main>
+
+  <script>
+    const MAIL_ENDPOINT = 'https://script.google.com/macros/s/AKfycby11mbGQWrW4j6BfRxP5SBtUBFcvQMIi2t6Vsz4Z4uzuqEDdE6moIMTWu7s2KYN0-8X/exec';
+
+    const labels = { a:'Director (A)', b:'Persuader (B)', c:'Stabiliser (C)', d:'Analyst (D)' };
+
+    const scenarios = [
+      ['A friend loans you a book', [
+        'You want to know the ending before you waste your time reading it.',
+        'You would rather discuss the book with your friends.',
+        'You have already read the book but take it anyway so as not to hurt your friend’s feelings.',
+        'You take the book but make a record of who you borrowed it from so you can give it back.'
+      ]],
+      ['You are waiting for an elevator', [
+        'You will wait in line but if it is late, you will take the stairs.',
+        'You look on the crowded elevator as a chance to get to know some other folks in the building.',
+        'You stand aside for others to get on first.',
+        'You count the number of occupants; if it is over the posted limit, you think the folks who got on last should wait for the next one.'
+      ]],
+      ['You are shopping for a new car', [
+        'You want to know how fast it will go and the size of the engine.',
+        'You drive across town to buy it from a long-time friend.',
+        'You look at the standard model and are not interested in the deluxe package of accessories.',
+        'You ask the price and check it against prices you got from shopping at other dealers.'
+      ]],
+      ['Your career is in aviation', [
+        'You are a pilot, controlling the aircraft.',
+        'You are an agent, behind the counter, dealing with customers — tickets, seat assignments, etc.',
+        'You are in customer service, calming customers and solving their problems — lost luggage, canceled flights, etc.',
+        'You are a flight controller, keeping flights safe and well-coordinated.'
+      ]],
+      ['You take a vacation', [
+        'You fly to a resort and play golf while the family is at the pool.',
+        'You head for a party town with party clothes and lots of money.',
+        'You go to the beach and take along several books, your swimsuit and plenty of suntan lotion.',
+        'You plan an itinerary with mileage, stops, driving hours and estimated gasoline consumption.'
+      ]],
+      ['You work at a desk', [
+        'Your desk is messy but it doesn’t bother you at all.',
+        'Your desk is messy and you don’t want to admit you can’t find anything on it, and you don’t want anyone to see.',
+        'It has piles of papers but you know what is in every pile and can find anything on the desk.',
+        'Your desk is not messy — everything is properly filed.'
+      ]],
+      ['You have a large lawn', [
+        'You mow your lawn early on Saturday so you can get on about your business.',
+        'You belong to the garden club and enjoy meeting with gardeners.',
+        'You have a garden and like to use the produce from it.',
+        'It is weedless and it bothers you when neighbors allow their lawns to get weedy.'
+      ]],
+      ['You have a pet', [
+        'You have a large animal that helps protect your property.',
+        'You have a small, cuddly animal.',
+        'You have more than one pet.',
+        'You have a pet; it is housebroken but stays outside in a more than adequate shelter.'
+      ]],
+      ['You play games for amusement', [
+        'You play outdoor sports such as softball, football, soccer or golf — or you walk or jog.',
+        'You play dumb charades or other party games.',
+        'You would really rather read.',
+        'You play games such as chess, checkers, bridge, or trivia.'
+      ]],
+      ['When you go out to eat', [
+        'You prefer a seafood place, or a buffet/cafeteria.',
+        'You prefer the family restaurant where there is music and lots of people.',
+        'You like something simple like sandwiches or pizza.',
+        'You prefer a place that has reservations rather than first-come, first-served.'
+      ]]
+    ].map(([title, texts]) => ({
+      title,
+      options: texts.map((text, i) => ({ letter: 'abcd'[i], text }))
+    }));
+
+    const styles = {
+      director: {
+        label: 'Director',
+        desc: 'You are results-driven and action-oriented. You take charge, make quick decisions and thrive on challenges.',
+        strengths: ['Results-driven','Decisive','Action-oriented','Competitive','Takes charge'],
+        watch: ['Can be impatient','May overlook details','Can seem forceful','May act too quickly','Finds delegating difficult']
+      },
+      persuader: {
+        label: 'Persuader',
+        desc: 'You are enthusiastic, persuasive, and people-oriented. You build relationships easily and bring energy to every group.',
+        strengths: ['Enthusiastic','Persuasive','People-oriented','Optimistic','Builds relationships'],
+        watch: ['Can be distracted','May overpromise','Can talk too much','May avoid routine','Can be impulsive']
+      },
+      stabiliser: {
+        label: 'Stabiliser',
+        desc: 'You are calm, dependable, and supportive. You value harmony, consistency, and strong relationships.',
+        strengths: ['Reliable','Patient','Supportive','Calm under pressure','Team-focused'],
+        watch: ['May resist change','Can avoid conflict','Slow to act','May put others first','Can be too cautious']
+      },
+      analyst: {
+        label: 'Analyst',
+        desc: 'You are detail-oriented, precise, and systematic. You seek excellence through accuracy and critical thinking. You prefer predictability and careful planning before acting.',
+        strengths: ['Detail-oriented','Accurate & careful','Critical thinker','Diligent & obedient','Seeks excellence'],
+        watch: ['Can be negative','Seems aloof','Slow decision maker','Resists delegating','Can bottle up feelings']
+      }
+    };
+
+    const ranks = Array.from({ length: 10 }, () => ({ a:null, b:null, c:null, d:null }));
+    let participant = { name:'', email:'' };
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+
+    function buildUI() {
+      $('questions').innerHTML = scenarios.map((s, i) => `
+        <article class="scenario">
+          <h3>${i + 1}. ${esc(s.title)}</h3>
+          ${s.options.map(o => `
+            <div class="option" id="o${i}${o.letter}">
+              <p><b>${o.letter.toUpperCase()}.</b> ${esc(o.text)}</p>
+              <div class="rank-buttons">
+                ${[1,2,3,4].map(r => `
+                  <button type="button" data-i="${i}" data-l="${o.letter}" data-r="${r}">${r}</button>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </article>
+      `).join('');
+
+      document.querySelectorAll('.rank-buttons button').forEach(button => {
+        button.addEventListener('click', () => setRank(Number(button.dataset.i), button.dataset.l, Number(button.dataset.r)));
+      });
+    }
+
+    function setRank(i, l, r) {
+      if (ranks[i][l] === r) {
+        ranks[i][l] = null;
+      } else {
+        Object.keys(ranks[i]).forEach(k => {
+          if (k !== l && ranks[i][k] === r) ranks[i][k] = null;
+        });
+        ranks[i][l] = r;
+      }
+      refresh(i);
+      updateProgress();
+    }
+
+    function refresh(i) {
+      const used = new Set(Object.values(ranks[i]).filter(Boolean));
+      Object.keys(ranks[i]).forEach(l => {
+        document.querySelectorAll(`#o${i}${l} button`).forEach(button => {
+          const r = Number(button.dataset.r);
+          button.classList.toggle('selected', r === ranks[i][l]);
+          button.disabled = used.has(r) && r !== ranks[i][l];
+        });
+      });
+    }
+
+    function updateProgress() {
+      const done = ranks.filter(x => Object.values(x).every(Boolean)).length;
+      $('progressFill').style.width = `${done * 10}%`;
+    }
+
+    function scores() {
+      const t = { a:0, b:0, c:0, d:0 };
+      ranks.forEach(x => {
+        Object.keys(t).forEach(k => t[k] += x[k] || 0);
+      });
+      return { director:t.a, persuader:t.b, stabiliser:t.c, analyst:t.d };
+    }
+
+    function report() {
+      const s = scores();
+      const primary = Object.keys(s).sort((a,b) => s[b] - s[a])[0];
+      return { scores:s, primary, style:styles[primary] };
+    }
+
+    function startAssessment() {
+      const n = $('participantName');
+      const e = $('participantEmail');
+
+      if (n.value.trim().length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.value.trim())) {
+        $('registrationHint').textContent = 'Please enter a valid name and email.';
+        return;
+      }
+
+      participant = { name:n.value.trim(), email:e.value.trim() };
+      $('registration').classList.add('hidden');
+      $('quiz').classList.remove('hidden');
+      $('progressWrap').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function resultHTML(r) {
+      const entries = [
+        ['director','Director (A)'],
+        ['persuader','Persuader (B)'],
+        ['stabiliser','Stabiliser (C)'],
+        ['analyst','Analyst (D)']
+      ];
+
+      return `
+        <div id="profileReport" class="report">
+          <h2>Your Leadership Profile</h2>
+          <div class="report-sub">Based on your responses across all 10 scenarios</div>
+
+          <div class="profile">
+            <div class="eyebrow">YOUR DOMINANT STYLE</div>
+            <h3>${r.style.label}</h3>
+            <p class="profile-desc">${r.style.desc}</p>
+
+            <div class="traits">
+              <div class="trait">
+                <h4>Strengths</h4>
+                ${r.style.strengths.map(x => `<div>＋ ${x}</div>`).join('')}
+              </div>
+
+              <div class="trait">
+                <h4>Watch out for</h4>
+                ${r.style.watch.map(x => `<div>− ${x}</div>`).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div class="score-grid">
+            ${entries.map(([k, label]) => `
+              <div class="score ${k}">
+                <h4>${label}</h4>
+                <strong>${r.scores[k]}</strong>
+                <div class="bar"><span style="width:${(r.scores[k] / 40) * 100}%"></span></div>
+                <small>out of 40 points</small>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function answersHTML() {
+      return `
+        <div id="answersPage" class="capture">
+          <h2>Assessment Answers</h2>
+          <p><b>Participant:</b> ${esc(participant.name)} (${esc(participant.email)})</p>
+          ${scenarios.map((s, i) => {
+            const ranked = s.options.map(option => ({ option, rank: ranks[i][option.letter] })).sort((a,b) => b.rank - a.rank);
+
+            return `
+              <div class="answer">
+                <b>${i + 1}. ${esc(s.title)}</b>
+                ${ranked.map(x => `<div>Rank ${x.rank} — ${labels[x.option.letter]}: ${esc(x.option.text)}</div>`).join('')}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function dataURLToBase64(dataUrl) {
+      return dataUrl.split(',')[1];
+    }
+
+    async function makePdf() {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit:'pt', format:'a4' });
+      const margin = 24;
+      const pageWidth = pdf.internal.pageSize.getWidth() - 48;
+      const pageHeight = pdf.internal.pageSize.getHeight() - 48;
+
+      const profileCanvas = await html2canvas($('profileReport'), {
+        scale: 2,
+        backgroundColor: '#f7f6f2',
+        useCORS: true
+      });
+
+      const answersCanvas = await html2canvas($('answersPage'), {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        useCORS: true
+      });
+
+      const profileRatio = profileCanvas.width / profileCanvas.height;
+      const profileW = pageWidth;
+      const profileH = profileW / profileRatio;
+
+      pdf.addImage(profileCanvas.toDataURL('image/png'), 'PNG', margin, margin, profileW, Math.min(profileH, pageHeight));
+      pdf.addPage();
+
+      const answersRatio = answersCanvas.width / answersCanvas.height;
+      const answersW = pageWidth;
+      const answersH = answersW / answersRatio;
+
+      pdf.addImage(answersCanvas.toDataURL('image/png'), 'PNG', margin, margin, answersW, Math.min(answersH, pageHeight));
+      return pdf;
+    }
+
+    async function sendResults() {
+      const status = $('mailStatus');
+      status.textContent = 'Preparing your image and PDF…';
+
+      try {
+        const profileCanvas = await html2canvas($('profileReport'), {
+          scale: 2,
+          backgroundColor: '#f7f6f2',
+          useCORS: true
+        });
+
+        const profileImage = profileCanvas.toDataURL('image/png');
+        const pdf = await makePdf();
+
+        const payload = {
+          subject: `Leadership assessment: ${participant.name}`,
+          participantName: participant.name,
+          participantEmail: participant.email,
+          htmlBody: '<p>Your leadership assessment results are attached.</p>',
+          imageBase64: dataURLToBase64(profileImage),
+          imageName: `${participant.name.replace(/\s+/g, '-')}-leadership-profile.png`,
+          pdfBase64: dataURLToBase64(pdf.output('datauristring')),
+          pdfName: `${participant.name.replace(/\s+/g, '-')}-leadership-assessment.pdf`
+        };
+
+        const response = await fetch(MAIL_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          throw new Error(text || 'Mail request failed');
+        }
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || 'Mail request failed');
+        }
+
+        status.textContent = 'Your image and PDF were emailed successfully.';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Your results are shown above, but the email could not be sent.';
+      }
+    }
+
+    function showResults() {
+      if (!ranks.every(x => Object.values(x).every(Boolean))) {
+        $('hint').textContent = 'Please rank all four options in every question.';
+        return;
+      }
+
+      const r = report();
+      $('result').innerHTML = resultHTML(r) + answersHTML();
+      $('quiz').classList.add('hidden');
+      $('progressWrap').classList.add('hidden');
+      $('thankYou').classList.remove('hidden');
+      window.scrollTo(0, 0);
+
+      sendResults();
+    }
+
+    buildUI();
+    $('startBtn').addEventListener('click', startAssessment);
+    $('submitBtn').addEventListener('click', showResults);
+  </script>
 </body>
 </html>
