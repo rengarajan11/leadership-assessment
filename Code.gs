@@ -1,6 +1,15 @@
+const ADMIN_EMAIL = 'rengarajan11@gmail.com';
+
+function doGet() {
+  return json({
+    success: true,
+    message: 'Leadership Assessment mail endpoint is running.'
+  });
+}
+
 function doPost(e) {
   try {
-    const raw = e && e.postData && e.postData.contents ? e.postData.contents : '{}';
+    const raw = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';
     const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
     if (!data || (!data.pdfBase64 && !data.imageBase64)) {
